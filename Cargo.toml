@@ -12,6 +12,7 @@ tokio = { version = "1.42.0", features = ["rt", "rt-multi-thread", "macros", "ti
 tokio-tungstenite = { version = "0.26.1", features = ["rustls-tls-native-roots"] }
 crossbeam-utils = "0.8.21"
 
+
 [profile.release]
 opt-level = 3  # 最大优化级别
 lto = true     # 启用 Link Time Optimization (LTO), 将各个模块在链接时进行优化，有助于消除冗余并提升性能
@@ -25,7 +26,8 @@ overflow-checks = false  # 禁用溢出检查，以提高性能
 criterion = "0.5"
 logos = "0.15.0"
 fast-float2 = "0.2.3"
-
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.135"
 
 [[bench]]
 name = "mark_price_parsers"

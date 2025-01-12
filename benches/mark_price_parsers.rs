@@ -76,11 +76,37 @@ fn parse_mark_price_sonic_pointer(msg: &str) -> (f64, String) {
     (price, symbol)
 }
 
+use serde::Deserialize;
+
+#[derive(Deserialize)]
+struct MarkPriceData {
+    data: MarketData,
+    symbol: String,
+}
+
+#[derive(Deserialize)]
+struct MarketData {
+    #[serde(rename = "markPrice")]
+    mark_price: String,
+}
+
+// 添加serde解析函数, 用于对比
+fn parse_mark_price_serde(msg: &str) -> (f64, String) {
+    let data: MarkPriceData = serde_json::from_str(msg).unwrap();
+    let price = fast_float2::parse(&data.data.mark_price).unwrap();
+    (price, data.symbol)
+}
+
+
 const MARK_PRICE: &str =
     r#"{"data":{"markPrice":"177.8919459"},"symbol":"SOL/USDT-P","topic":"mark_price"}"#;
 
 fn criterion_benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("mark_price_parsers");
+
+    group.bench_function("serde parser", |b| {
+        b.iter(|| parse_mark_price_serde(black_box(MARK_PRICE)))
+    });
 
     group.bench_function("logos parser", |b| {
         b.iter(|| parse_mark_price_logos(black_box(MARK_PRICE)))
