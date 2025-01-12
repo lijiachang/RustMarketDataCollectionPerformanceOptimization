@@ -13,6 +13,12 @@
 
 - `main`: 包含最终优化版本
 - `step1`: 基于Mutex和轮询的基础实现
+- `step2`: 基于AtomicCell的无锁实现和事件驱动处理
+   - 用AtomicCell替换Mutex实现无锁操作
+   - 实现事件驱动的回调机制
+   - 增加Bitget交易所数据采集
+   - 优化JSON解析，实现零拷贝提取
+   - 添加WebSocket心跳维护
 - 更多分支开发中...
 
 ## 功能特性
@@ -55,7 +61,7 @@ tokio-tungstenite = { version = "0.26.1", features = ["rustls-tls-native-roots"]
 RUSTFLAGS="-C target-cpu=native" cargo build --release
 
 # 运行程序
-./target/release/your_binary_name
+./target/release/RustMarketDataCollectionPerformanceOptimization
 ```
 
 ## 性能优化

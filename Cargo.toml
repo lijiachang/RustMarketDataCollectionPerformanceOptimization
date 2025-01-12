@@ -10,6 +10,7 @@ rustls = { version = "0.23.20", features = ["ring"] }
 sonic-rs = "0.3.17"
 tokio = { version = "1.42.0", features = ["rt", "rt-multi-thread", "macros", "time"] }
 tokio-tungstenite = { version = "0.26.1", features = ["rustls-tls-native-roots"] }
+crossbeam-utils = "0.8.21"
 
 [profile.release]
 opt-level = 3  # 最大优化级别

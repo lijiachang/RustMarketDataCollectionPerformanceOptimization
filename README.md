@@ -12,6 +12,12 @@ This project showcases different approaches to collecting and processing cryptoc
 
 - `main`: Contains the final optimized version
 - `step1`: Basic implementation with Mutex and polling
+- `step2`: Lock-free implementation with AtomicCell and event-driven processing
+   - Replaced Mutex with AtomicCell for lock-free operations
+   - Implemented event-driven callback mechanism
+   - Added Bitget exchange data collection
+   - Optimized JSON parsing with zero-copy extraction
+   - Added WebSocket heartbeat management
 - More branches coming soon...
 
 ## Features
@@ -54,7 +60,7 @@ tokio-tungstenite = { version = "0.26.1", features = ["rustls-tls-native-roots"]
 RUSTFLAGS="-C target-cpu=native" cargo build --release
 
 # Run the program
-./target/release/your_binary_name
+./target/release/RustMarketDataCollectionPerformanceOptimization
 ```
 
 ## Performance Optimizations
