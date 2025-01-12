@@ -101,3 +101,19 @@ RUSTFLAGS="-C target-cpu=native" cargo build --release
         - 简单、现代、安全
         - 去除旧版加密算法
         - 无外部依赖
+
+文献
+- 了解什么是mimalloc?
+   https://zhuanlan.zhihu.com/p/671433123
+
+- 了解什么是sonic_rs?
+   https://github.com/cloudwego/sonic-rs/blob/main/docs/performance_zh.md
+
+- Rust的闭包官方概念
+   https://kaisery.github.io/trpl-zh-cn/ch13-01-closures.html
+
+- AtomicCell
+   https://docs.rs/crossbeam-utils/latest/crossbeam_utils/atomic/struct.AtomicCell.html
+
+- Rust采集行情
+  https://mp.weixin.qq.com/s/3ucu3OVzrlgTupmP9zD0OQ
