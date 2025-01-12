@@ -15,9 +15,7 @@ This project showcases different approaches to collecting and processing cryptoc
 - `step2`: Lock-free implementation with AtomicCell and event-driven processing
    - Replaced Mutex with AtomicCell for lock-free operations
    - Implemented event-driven callback mechanism
-   - Added Bitget exchange data collection
    - Optimized JSON parsing with zero-copy extraction
-   - Added WebSocket heartbeat management
 - More branches coming soon...
 
 ## Features
@@ -28,6 +26,7 @@ Current implementation:
 - SIMD-accelerated JSON parsing with sonic-rs
 - Thread-safe data sharing mechanisms
 
+Todo:
 - Lock-free implementation
 - Memory alignment optimization
 - Distributed collection
