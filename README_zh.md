@@ -24,14 +24,12 @@
 ## 功能特性
 
 当前实现：
-- 币安交易所高性能行情数据采集
 - 使用Microsoft的mimalloc进行内存优化
 - 使用纯Rust实现的rustls进行TLS优化
 - 使用sonic-rs进行SIMD加速的JSON解析
 - 线程安全的数据共享机制
 
 - 无锁实现
-- 多交易所支持
 - 内存对齐优化
 - 分布式采集
 - CPU亲和性绑定
@@ -102,12 +100,71 @@ RUSTFLAGS="-C target-cpu=native" cargo build --release
         - 去除旧版加密算法
         - 无外部依赖
 
+## JSON解析性能对比: Logos vs Sonic-rs
+
+功能定位
+
+sonic-rs
+
+    定位：高性能 JSON 解析器和序列化库
+    主要用途：JSON 数据处理
+    特点：SIMD加速，零拷贝，性能优先
+
+logos
+
+    定位：词法分析器（Lexer）生成器
+    主要用途：文本分词和词法分析
+    特点：零拷贝，编译时生成，通用性强
+
+
+下面对比下性能差异
+```bash
+cargo bench
+```
+
+在我的电脑中（M4 Mac Mini）得出的结果是：
+```bash
+mark_price_parsers/logos parser
+                        time:   [47.776 ns 47.927 ns 48.090 ns]
+                        change: [-2.4401% -1.9585% -1.4345%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 100 measurements (2.00%)
+  2 (2.00%) high mild
+mark_price_parsers/sonic parser
+                        time:   [149.09 ns 149.69 ns 150.31 ns]
+                        change: [-1.0662% -0.6079% -0.1409%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 100 measurements (1.00%)
+  1 (1.00%) high mild
+mark_price_parsers/sonic pointer parser
+                        time:   [145.28 ns 148.97 ns 152.89 ns]
+                        change: [+0.1168% +1.1496% +2.5450%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Found 14 outliers among 100 measurements (14.00%)
+```
+性能分析
+
+    Logos最快的原因：
+        编译时生成专用解析代码
+        最小解析原则，只处理需要的字段
+        避免了完整JSON解析的开销
+
+    Sonic-rs的优势：
+        支持完整的JSON操作
+        类型安全
+        SIMD加速
+        零拷贝实现（pointer方式）
+
+
 文献
 - 了解什么是mimalloc?
    https://zhuanlan.zhihu.com/p/671433123
 
 - 了解什么是sonic_rs?
    https://github.com/cloudwego/sonic-rs/blob/main/docs/performance_zh.md
+
+- Logos代码库
+  https://github.com/maciejhirsz/logos
 
 - Rust的闭包官方概念
    https://kaisery.github.io/trpl-zh-cn/ch13-01-closures.html

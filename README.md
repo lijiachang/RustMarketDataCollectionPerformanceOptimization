@@ -23,14 +23,12 @@ This project showcases different approaches to collecting and processing cryptoc
 ## Features
 
 Current implementation:
-- High-performance market data collection from Binance
 - Memory optimization using Microsoft's mimalloc
 - TLS optimization using pure Rust implementation (rustls)
 - SIMD-accelerated JSON parsing with sonic-rs
 - Thread-safe data sharing mechanisms
 
 - Lock-free implementation
-- Multi-exchange support
 - Memory alignment optimization
 - Distributed collection
 - CPU affinity binding
@@ -81,3 +79,58 @@ The project implements several performance optimizations:
     - SIMD-accelerated parsing with sonic-rs
     - Zero-copy data extraction
     - Optimized memory usage
+
+## JSON Parser Comparison: Logos vs Sonic-rs
+
+Positioning:
+
+Sonic-rs:
+- Purpose: High-performance JSON parser and serialization library
+- Main use: JSON data processing
+- Features: SIMD acceleration, zero-copy, performance focused
+
+Logos:
+- Purpose: Lexer generator
+- Main use: Text tokenization and lexical analysis
+- Features: Zero-copy, compile-time generation, general purpose
+
+Performance Comparison:
+```bash
+cargo bench
+```
+
+Results on M4 Mac Mini:
+```bash
+mark_price_parsers/logos parser
+                        time:   [47.776 ns 47.927 ns 48.090 ns]
+                        change: [-2.4401% -1.9585% -1.4345%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 100 measurements (2.00%)
+  2 (2.00%) high mild
+mark_price_parsers/sonic parser
+                        time:   [149.09 ns 149.69 ns 150.31 ns]
+                        change: [-1.0662% -0.6079% -0.1409%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 100 measurements (1.00%)
+  1 (1.00%) high mild
+mark_price_parsers/sonic pointer parser
+                        time:   [145.28 ns 148.97 ns 152.89 ns]
+                        change: [+0.1168% +1.1496% +2.5450%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Found 14 outliers among 100 measurements (14.00%)
+```
+
+Performance Analysis:
+
+Why Logos is faster:
+
+    Compile-time generated specialized parsing code
+    Minimal parsing principle, only processes required fields
+    Avoids full JSON parsing overhead
+
+Sonic-rs advantages:
+
+    Support for complete JSON operations
+    Type safety
+    SIMD acceleration
+    Zero-copy implementation (pointer mode)

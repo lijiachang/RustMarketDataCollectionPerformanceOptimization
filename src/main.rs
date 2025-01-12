@@ -2,7 +2,7 @@
 
 use futures_util::{SinkExt, StreamExt};
 use sonic_rs::{pointer, JsonValueTrait, Value};
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::time::Duration;
 use crossbeam_utils::atomic::AtomicCell;
 use tokio_tungstenite::connect_async;

@@ -20,3 +20,13 @@ debug = false  # 关闭调试信息
 panic = 'abort'  # 使用最小化 panic 处理，以提高性能
 incremental = false  # 禁用增量编译（只适用于开发阶段）
 overflow-checks = false  # 禁用溢出检查，以提高性能
+
+[dev-dependencies]
+criterion = "0.5"
+logos = "0.15.0"
+fast-float2 = "0.2.3"
+
+
+[[bench]]
+name = "mark_price_parsers"
+harness = false
