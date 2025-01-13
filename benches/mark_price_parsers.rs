@@ -97,6 +97,11 @@ fn parse_mark_price_serde(msg: &str) -> (f64, String) {
     (price, data.symbol)
 }
 
+fn parse_mark_price_sonic_struct(msg: &str) -> (f64, String) {
+    let data: MarkPriceData = sonic_rs::from_str(msg).unwrap();
+    let price = fast_float2::parse(&data.data.mark_price).unwrap();
+    (price, data.symbol)
+}
 
 const MARK_PRICE: &str =
     r#"{"data":{"markPrice":"177.8919459"},"symbol":"SOL/USDT-P","topic":"mark_price"}"#;
@@ -118,6 +123,9 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     group.bench_function("sonic pointer parser", |b| {
         b.iter(|| parse_mark_price_sonic_pointer(black_box(MARK_PRICE)))
+    });
+    group.bench_function("sonic struct parser", |b| {
+        b.iter(|| parse_mark_price_sonic_struct(black_box(MARK_PRICE)))
     });
     group.finish();
 }
